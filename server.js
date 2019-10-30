@@ -4,6 +4,8 @@ const morgan = require('morgan');
 
 const userRouter = require('./users/userRouter')
 
+const logger = require('./middleware/logger')
+
 const server = express();
 
 
@@ -14,17 +16,9 @@ server.use(morgan('dev'));
 
 server.use('/api/users', logger('Logger for users: '), userRouter);
 
-function logger(prefix) {
-  return (req, res, next) => {
-    console.log(
-      `${prefix} [${new Date().toISOString()}] ${req.method} to ${req.url}`
-    );
 
-    next();
-  };
-}
 
-server.get('/', (req, res) => {
+server.get('/', logger('Logger for initial GET: '), (req, res) => {
   res.send(`<h2>Let's write some middleware!</h2>`)
 });
 
