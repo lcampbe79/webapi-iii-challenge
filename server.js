@@ -12,7 +12,7 @@ server.use(helmet());
 server.use(express.json());
 server.use(morgan('dev'));
 
-server.use('/api/users', userRouter);
+server.use('/api/users', logger('Logger for users: '), userRouter);
 
 function logger(prefix) {
   return (req, res, next) => {

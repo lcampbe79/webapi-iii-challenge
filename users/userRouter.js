@@ -30,7 +30,7 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:id', (req, res) => {
-
+  users.getById(req.params.id)
 });
 
 router.get('/:id/posts', (req, res) => {
