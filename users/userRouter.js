@@ -4,7 +4,6 @@ const Users = require('./userDb');
 const validateUser = require('../middleware/validateUser');
 const router = express.Router();
 
-// const validateUser = require('../middleware/validateUser')
 router.post('/', validateUser, (req, res) => {
   
   Users.insert(req.body)
@@ -33,7 +32,18 @@ router.get('/', (req, res) => {
 
 router.get('/:id', (req, res) => {
   
-  users.getById(req.params.id)
+  Users.getById(req.params.id)
+  .then(user => {
+    if (!user.id) {
+      res.status(400).json({message: "The user with the specified ID does not exist."})
+    } else {
+      res.status(200).json(user)
+    }
+  })
+  .catch(error => {
+    console.log(error);
+    res.status(500).json({error: "The posts information could not be retrieved."})
+  })
 });
 
 router.get('/:id/posts', (req, res) => {
