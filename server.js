@@ -1,15 +1,25 @@
-const express = 'express';
+const express = require('express');
+const helmet = require('helmet');
+const morgan = require('morgan');
+
+const userRouter = require('./users/userRouter')
+
+const logger = require('./middleware/logger')
 
 const server = express();
 
-server.get('/', (req, res) => {
-  res.send(`<h2>Let's write some middleware!</h2>`)
-});
 
 //custom middleware
+server.use(helmet());
+server.use(express.json());
+server.use(morgan('dev'));
 
-function logger(req, res, next) {
+server.use('/api/users', logger('Logger for users: '), userRouter);
 
-};
+
+
+server.get('/', logger('Logger for initial GET: '), (req, res) => {
+  res.send(`<h2>Let's write some middleware!</h2>`)
+});
 
 module.exports = server;
